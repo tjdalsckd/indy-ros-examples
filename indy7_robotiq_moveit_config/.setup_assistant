@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: indy7_robotiq_description
+    relative_path: urdf/indy7_and_robotiq.xacro
+    xacro_args: "--inorder "
+  SRDF:
+    relative_path: config/indy7_and_robotiq.srdf
+  CONFIG:
+    author_name: Leesw
+    author_email: todo@todo.todo
+    generated_timestamp: 1562893726
