@@ -1,0 +1,12 @@
+<launch>
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find indy7_description)/urdf/indy7.xacro'"/>
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find indy7_moveit_dcp_example)/rviz_config/moveit_example.rviz"/>
+
+  <include file="$(find indy7_moveit_config)/launch/move_group.launch">
+    <arg name="publish_monitored_planning_scene" value="true" />
+  </include>
+
+  <node name="moveit_controller_app" type="app.py" pkg="indy7_moveit_dcp_example" />
+  <node name="dcp_driver" type="dcp_driver.py" pkg="indy7_moveit_dcp_example" />
+</launch>
