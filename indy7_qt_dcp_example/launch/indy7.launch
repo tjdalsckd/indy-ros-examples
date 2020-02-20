@@ -5,4 +5,7 @@
   
   <node name="joint_controller_app" type="app.py" pkg="indy7_qt_dcp_example" />
   <node name="dcp_driver" type="dcp_driver.py" pkg="indy7_qt_dcp_example" />
+  <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+		<param name="use_gui" value="TRUE"/>
+	</node> -->
 </launch>

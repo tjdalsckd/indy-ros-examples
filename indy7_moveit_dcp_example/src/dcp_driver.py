@@ -23,9 +23,9 @@ def degs2rads(deg_list):
 
 class IndyROSConnector:
     def __init__(self):
-
-        _bind_ip = "192.168.3.104"
-        _robot_ip = "192.168.3.117"
+        
+        _bind_ip = "192.168.0.147"
+        _robot_ip = "192.168.0.151"
         _name = "NRMK-Indy7"
        
         # Connect
