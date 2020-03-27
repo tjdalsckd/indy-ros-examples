@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>indy7_qt_dcp_example</name>
+  <name>indy7_dcp_example</name>
   <version>0.0.0</version>
-  <description>indy7_qt_dcp_example</description>
+  <description>indy7_dcp_example</description>
   <maintainer email="gwanwoo.kim@neuromeka.com">Gwanwoo Kim</maintainer>
 
 

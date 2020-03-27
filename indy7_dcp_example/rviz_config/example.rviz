@@ -6,7 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /RobotState1
       Splitter Ratio: 0.5
     Tree Height: 552
   - Class: rviz/Selection
@@ -129,7 +128,7 @@ Visualization Manager:
     - Attached Body Color: 150; 50; 150
       Class: moveit_rviz_plugin/RobotState
       Collision Enabled: false
-      Enabled: true
+      Enabled: false
       Links:
         All Links Enabled: true
         Expand Joint Details: false
@@ -185,7 +184,7 @@ Visualization Manager:
       Robot State Topic: /indy/query_joint_states
       Show All Links: true
       Show Highlights: true
-      Value: true
+      Value: false
       Visual Enabled: true
   Enabled: true
   Global Options:
@@ -251,5 +250,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 67
-  Y: 27
+  X: 1151
+  Y: 111

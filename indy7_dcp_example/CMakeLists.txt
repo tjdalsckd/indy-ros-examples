@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(indy7_qt_dcp_example)
+project(indy7_dcp_example)
 
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
