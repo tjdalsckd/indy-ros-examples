@@ -7,6 +7,6 @@ controller_list:
       - joint3
       - joint4
       - joint5
-  - name: fake_robotiq_controller
+  - name: fake_hand_controller
     joints:
       - finger_joint

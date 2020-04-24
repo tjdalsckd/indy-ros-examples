@@ -1,10 +1,7 @@
 <?xml version="1.0" ?>
 <robot name="indy7_and_robotiq" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:include filename="$(find indy7_robotiq_description)/urdf/robotiq_arg85_description.xacro"/>
   <xacro:include filename="$(find indy7_description)/urdf/indy7.xacro"/>
-
-  <!-- <xacro:indy7/> -->
-  <xacro:robotiq_arg85 connected_to="tcp"/>
+  <xacro:include filename="$(find indy7_robotiq_description)/urdf/robotiq_arg85_description.xacro"/>
 
   <joint name="indy7_joint_tcp" type="fixed">
     <parent link="tcp"/>
