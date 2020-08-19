@@ -4,7 +4,7 @@ import sys
 import copy
 import rospy
 import moveit_commander
-import moveit_msgs.msg
+from moveit_msgs.msg import MoveGroupActionResult
 import geometry_msgs.msg
 import shape_msgs.msg
 from math import pi
@@ -22,6 +22,8 @@ class PickNPlaceTutorial():
         self.robot_group = moveit_commander.MoveGroupCommander('indy7')
         self.hand_group = moveit_commander.MoveGroupCommander('hand')
 
+        self.plan_result_pub = rospy.Publisher("/move_group/result", MoveGroupActionResult, queue_size=1)
+
         # Misc variables
         self.box_name = ''
 
@@ -33,23 +35,29 @@ class PickNPlaceTutorial():
         self.hand_group.detach_object(target_name)
 
     def jmove_to_pose_goal(self, pose_goal):
-        self.robot_group.set_pose_target(pose_goal)
-        self.robot_group.go(wait=True)
+        # self.robot_group.set_pose_target(pose_goal)
+        plan = self.robot_group.plan(pose_goal)
+        self.robot_group.execute(plan, wait=True)
+        # self.robot_group.go(wait=True)
 
     def jmove_to_joint_goal(self, joint_goal):
-        self.robot_group.go(joint_goal, wait=True)
+        # self.robot_group.go(joint_goal, wait=True)
+        plan = self.robot_group.plan(joint_goal)
+        self.robot_group.execute(plan, wait=True)
         
     def tmove_to_pose_goal(self, pose_goal):
         waypoints = []
         waypoints.append(self.robot_group.get_current_pose().pose)
         waypoints.append(pose_goal)
 
-
         plan, _ = self.robot_group.compute_cartesian_path(
                                    waypoints,   # waypoints to follow
                                    0.01,        # eef_step
                                    0.0)         # jump_threshold
 
+        msg = MoveGroupActionResult()
+        msg.result.planned_trajectory = plan
+        self.plan_result_pub.publish(msg)
         self.robot_group.execute(plan)
     
     def wait_for_state_update(self, box_name, box_is_known=False, box_is_attached=False, timeout=4):
@@ -123,7 +131,6 @@ def main():
         pnp.tmove_to_pose_goal(list_to_pose([0.35, -0.10, 0.18, 0, -pi, -pi/2]))
         pnp.hold_hand('cube_0')
         pnp.tmove_to_pose_goal(list_to_pose([0.35, -0.10, 0.28, 0, -pi, -pi/2]))
-
 
         pnp.jmove_to_pose_goal(list_to_pose([0.65, -0.10, 0.48, 0, -pi, -pi/2]))
         pnp.tmove_to_pose_goal(list_to_pose([0.65, -0.10, 0.18, 0, -pi, -pi/2]))

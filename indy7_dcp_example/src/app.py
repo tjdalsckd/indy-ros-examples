@@ -6,7 +6,7 @@ import math
 
 from time import sleep
 from std_msgs.msg import Bool
-from moveit_msgs.msg import  DisplayRobotState
+from sensor_msgs.msg import JointState
 import rospy
 
 def rads2degs(rad_list):
@@ -21,21 +21,17 @@ class JointControllerApp():
     def __init__(self):
         rospy.init_node("joint_controller")
 
-        self.query_joint_state_pub = rospy.Publisher("/indy/query_joint_states", DisplayRobotState, queue_size=10)
-        self.go_pub = rospy.Publisher("/indy/execute_plan", Bool, queue_size=1)
-        self.stop_pub = rospy.Publisher("/indy/stop_robot", Bool, queue_size=1)
+        self.execute_joint_state_pub = rospy.Publisher("/indy/execute_joint_state", JointState, queue_size=1)
+        self.stop_pub = rospy.Publisher("/stop_motion", Bool, queue_size=1)
 
-    def update_joint_pos(self, q):
-        display_robot_state_msg = DisplayRobotState()
-        display_robot_state_msg.state.joint_state.header.stamp = rospy.Time.now()
-        display_robot_state_msg.state.joint_state.name = ['joint0', 'joint1', 'joint2', 'joint3', 'joint4', 'joint5']
-        display_robot_state_msg.state.joint_state.position = degs2rads(q)
-        display_robot_state_msg.state.joint_state.velocity = []
-        display_robot_state_msg.state.joint_state.effort = []
-        self.query_joint_state_pub.publish(display_robot_state_msg)
-
-    def go(self):
-        self.go_pub.publish(True)
+    def go(self, q):
+        joint_state_msg = JointState()
+        joint_state_msg.header.stamp = rospy.Time.now()
+        joint_state_msg.name = ['joint0', 'joint1', 'joint2', 'joint3', 'joint4', 'joint5']
+        joint_state_msg.position = degs2rads(q)
+        joint_state_msg.velocity = []
+        joint_state_msg.effort = []
+        self.execute_joint_state_pub.publish(joint_state_msg)
 
     def stop(self):
         self.stop_pub.publish(True)
@@ -44,29 +40,34 @@ if __name__ == "__main__":
     app = JointControllerApp()
     
     while True:
-        q = [0, 0, 0, 0, 0, 0]
-        for i in range(6):
-            q[i] = float(raw_input('query joint {} position '.format(i)))
+        try:
+            q = [0, 0, 0, 0, 0, 0]
 
-        print('joint query : ' + str(q))
-        app.update_joint_pos(q)
+            for i in range(6):
+                q[i] = float(raw_input('query joint {} position '.format(i)))
 
-        go_sign = raw_input('enter g to move robot ')
-        if go_sign == 'g':
-            app.go()
-        else:
-            continue
-        
-        stop_sign = raw_input('enter s to move robot ')
-        if stop_sign == 's':
-            app.stop()
-        else:
-            continue
+            print('joint query : ' + str(q))
 
-        exit_sign = raw_input('enter q to quit program ')
-        if exit_sign == 'q':
-            break
-        else:
-            continue
+            go_sign = raw_input('enter g to move robot else to cancel')
+            if go_sign == 'g':
+                app.go(q)
+            else:
+                continue
+            
+            stop_sign = raw_input('enter s to move robot ')
+            if stop_sign == 's':
+                app.stop()
+            else:
+                continue
+
+            exit_sign = raw_input('enter q to quit program ')
+            if exit_sign == 'q':
+                break
+            else:
+                continue
+
+        except KeyboardInterrupt:
+            sys.exit()
+       
         
     
